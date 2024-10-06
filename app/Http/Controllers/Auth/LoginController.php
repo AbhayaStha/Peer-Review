@@ -3,30 +3,54 @@
 namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 
 class LoginController extends Controller
 {
-    public function login(Request $request)
+    /**
+     * Display the login form.
+     */
+    public function loginForm()
     {
-        // Validate the login credentials
-        $request->validate([
-            's_number' => 'required',
-            'password' => 'required',
-        ]);
-
-        // Attempt to login the user
-        if (!auth()->attempt(['s_number' => $request->input('s_number'), 'password' => $request->input('password')])) {
-            return redirect()->back()->withErrors(['Invalid credentials']);
-        }
-
-        // Redirect to the dashboard
-        return redirect()->route('dashboard');
+        return view('login'); // return the view for the login form
     }
 
-    public function logout(Request $request)
+    /**
+     * Handle the login request.
+     */
+    public function login(Request $request)
     {
-        auth()->logout();
+        // Validate input fields
+        $request->validate([
+            's_number' => 'required|string', // Validate the student/teacher number
+            'password' => 'required|string',
+        ]);
+
+        // Attempt to log in using the s_number and password
+        if (Auth::attempt(['s_number' => $request->s_number, 'password' => $request->password])) {
+            // If successful, redirect based on user type (or default route)
+            $user = Auth::user();
+            if ($user->type == 'teacher') {
+                return redirect()->route('dashboard.teacher'); // example teacher dashboard
+            } elseif ($user->type == 'student') {
+                return redirect()->route('dashboard.student'); // example student dashboard
+            }
+        }
+
+        // If authentication fails, redirect back to login with an error message
+        return back()->withErrors([
+            's_number' => 'Invalid credentials. Please try again.',
+        ])->onlyInput('s_number');
+    }
+
+    /**
+     * Log out the user and redirect to login.
+     */
+    public function logout()
+    {
+        Auth::logout();
         return redirect()->route('login');
     }
 }

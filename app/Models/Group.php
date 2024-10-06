@@ -8,5 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Group extends Model
 {
     use HasFactory;
-    protected $table = 'group';
+
+    // Assessment: A group belongs to an assessment
+    public function assessment()
+    {
+        return $this->belongsTo(Assessment::class);
+    }
+
+    // Group Members: A group can have many group members
+    public function groupMembers()
+    {
+        return $this->hasMany(GroupMember::class);
+    }
 }

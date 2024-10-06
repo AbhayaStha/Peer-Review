@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Assessment;
 use App\Models\Review;
 use App\Models\Group;
+use App\Models\Enrollment;
 use App\Models\Marking;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
@@ -18,16 +19,20 @@ use App\Http\Controllers\MarkingController;
 use App\Http\Controllers\CourseUploadController;
 
 Route::get('/users', function () {
-    $users = User::all();
-    // return view('users', compact('users'));
-    dd($users);
+    // $users = User::find(1);
+    // dd($users);
+
+    $course = Enrollment::find(1)->course;
+    dd($course);
 });
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/login', [LoginController::class, 'login'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
+
+Route::get('/login', [LoginController::class, 'loginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
 
 Route::get('/register', [RegisterController::class, 'register'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);

@@ -8,5 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Course extends Model
 {
     use HasFactory;
-    protected $table = 'course';
+    
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
+    // Assessments: A course can have many assessments
+    public function assessments()
+    {
+        return $this->hasMany(Assessment::class);
+    }
 }

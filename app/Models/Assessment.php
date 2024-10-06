@@ -8,5 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Assessment extends Model
 {
     use HasFactory;
-    protected $table = 'assessment';
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+
+    // Groups: An assessment can have many groups
+    public function groups()
+    {
+        return $this->hasMany(Group::class);
+    }
+
+    // Reviews: An assessment can have many reviews
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

@@ -36,6 +36,6 @@ class AssessmentController extends Controller
     public function show(Assessment $assessment)
     {
         // Display the assessment details
-        return view('assessments.show', compact(' assessment'));
+        // return view('assessments.show', compact(' assessment'));
     }
 }
