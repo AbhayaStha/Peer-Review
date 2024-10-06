@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('assessment', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained()->onDelete('cascade');
+            $table->foreignId('course_id')->constrained('course')->onDelete('cascade');
             $table->string('title');
             $table->text('instruction');
             $table->integer('num_required_reviews');
