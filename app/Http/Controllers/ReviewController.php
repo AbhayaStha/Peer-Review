@@ -11,6 +11,7 @@ class ReviewController extends Controller
 {
     public function store(Request $request)
     {
+        // dd($request->all());
         // Validate the review form
         $request->validate([
             'assessment_id' => 'required',
@@ -24,6 +25,7 @@ class ReviewController extends Controller
             'reviewer_id' => auth()->user()->id,
             'reviewee_id' => $request->input('reviewee_id'),
             'review_text' => $request->input('review_text'),
+            'submitted_at' => now(),
         ]);
     
         // Redirect to the assessment page

@@ -12,8 +12,9 @@ class Review extends Model
     protected $fillable = [
         'reviewer_id',
         'reviewee_id',
-        'review_texts',
+        'review_text',
         'assessment_id',
+        'submitted_at',
     ];
 
     // Assessment: A review belongs to an assessment
