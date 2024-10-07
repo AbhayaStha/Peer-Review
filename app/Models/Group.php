@@ -9,6 +9,11 @@ class Group extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'assessment_id',
+        'group_name',
+    ];
+
     // Assessment: A group belongs to an assessment
     public function assessment()
     {

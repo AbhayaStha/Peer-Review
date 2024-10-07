@@ -5,6 +5,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\GroupController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,7 +26,8 @@ Route::post('/enrollments', [EnrollmentController::class, 'store'])->name('enrol
 Route::post('/enrollments/{type}', [EnrollmentController::class, 'store'])->name('enrollments.store');
 Route::post('/assessments', [AssessmentController::class, 'create'])->name('assessments.store');
 Route::post('/assessments', [AssessmentController::class, 'store'])->name('assessments.store');
-
+Route::post('/groups', [GroupController::class, 'store'])->name('groups.store');
+Route::get('/groups/{group}', [GroupController::class, 'show'])->name('groups.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

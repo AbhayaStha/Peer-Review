@@ -13,20 +13,21 @@ class ReviewController extends Controller
     {
         // Validate the review form
         $request->validate([
+            'assessment_id' => 'required',
             'reviewee_id' => 'required',
             'review_text' => 'required',
         ]);
-
+    
         // Create a new review
         Review::create([
+            'assessment_id' => $request->input('assessment_id'),
             'reviewer_id' => auth()->user()->id,
             'reviewee_id' => $request->input('reviewee_id'),
-            'review_text' => $request->input('review'),
-            'assessment_id' => $request->input('assessment_id'),
+            'review_text' => $request->input('review_text'),
         ]);
-
-        // Redirect to the assessments index
-        return redirect()->route('assessments.index');
+    
+        // Redirect to the assessment page
+        return redirect()->route('assessments.show', $request->input('assessment_id'));
     }
 
     public function show(User $user)

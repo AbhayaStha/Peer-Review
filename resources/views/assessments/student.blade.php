@@ -10,42 +10,38 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <h3 class="mt-4">Assessment Details:</h3>
-                    <p>Title: {{ $assessment->title }}</p>
                     <p>Instruction: {{ $assessment->instruction }}</p>
-                    <p>Number of Required Reviews: {{ $assessment->num_required_reviews }}</p>
-                    <p>Due Date: {{ $assessment->due_date }}</p>
+                    <p>Number of required reviews: {{ $numRequiredReviews }}</p>
+                    <p>Due date: {{ $assessment->due_date }}</p>
 
-                    <h3 class="mt-4">Submit Review:</h3>
+                    <h3 class="mt-4">Submit Peer Review:</h3>
                     <form action="{{ route('reviews.store') }}" method="POST">
                         @csrf
                         <input type="hidden" name="assessment_id" value="{{ $assessment->id }}">
-
-                        <div class="mb-4">
-                            <label for="reviewee_id">Select Reviewee:</label>
-                            <select id="reviewee_id" name="reviewee_id" required>
-                                @foreach ($students as $student)
-                                    <option value="{{ $student->id }}">{{ $student->name }}</option>
+                        <div>
+                            <label for="reviewee">Select Reviewee:</label>
+                            <select name="reviewee_id" id="reviewee">
+                                @foreach ($reviewees as $reviewee)
+                                    <option value="{{ $reviewee->id }}">{{ $reviewee->name }}</option>
                                 @endforeach
                             </select>
                         </div>
-
-                        <div class="mb-4">
-                            <label for="review_text">Enter Review:</label>
-                            <textarea id="review_text" name="review_text" required></textarea>
+                        <div>
+                            <label for="review">Enter Review:</label>
+                            <textarea name="review_text" id="review" rows="5"></textarea>
                         </div>
-
-                        <button type="submit">Submit Review</button>
+                        <button type="submit" class="bg-orange-500 hover:bg-orange-700 text-black font-bold py-4 px-6 rounded border border-gray-300">
+                            Submit Review
+                        </button>
                     </form>
 
-                    <h3 class="mt-4">Reviews Received:</h3>
+                    <h3 class="mt-4">Peer Reviews Received:</h3>
                     <ul>
-                        @forelse ($reviews as $review)
+                        @foreach ($reviews as $review)
                             <li>
                                 {{ $review->reviewer->name }}: {{ $review->review_text }}
                             </li>
-                        @empty
-                            <li>No reviews received.</li>
-                        @endforelse
+                        @endforeach
                     </ul>
                 </div>
             </div>

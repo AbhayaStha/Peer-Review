@@ -63,7 +63,7 @@ public function show(Assessment $assessment)
     // Get the course for the assessment
     $course = $assessment->course;
 
-    // Get the students for the course
+    // Get the students enrolled in the course
     $students = $course->students()->get();
 
     // Get the groups for the assessment
@@ -75,13 +75,24 @@ public function show(Assessment $assessment)
         $groupedStudents[$group->id] = $group->groupMembers()->get();
     }
 
+    // Get the peer reviews received by the student
+    $reviews = $assessment->reviews()->where('reviewee_id', auth()->id())->get();
+
+    // Get the number of required reviews
+    $numRequiredReviews = $assessment->num_required_reviews;
+
+    // Get the reviewees for the student
+    $reviewees = $students->filter(function ($student) {
+        return $student->id !== auth()->id();
+    });
+
     // Check if the user is a teacher
     if (auth()->user()->isTeacher()) {
         // Display the teacher view
-        return view('assessments.teacher', compact('assessment', 'course', 'students', 'groupedStudents'));
+        return view('assessments.teacher', compact('assessment', 'course', 'students', 'groups', 'groupedStudents'));
     } else {
         // Display the student view
-        return view('assessments.student', compact('assessment', 'course', 'students', 'groupedStudents'));
+        return view('assessments.student', compact('assessment', 'course', 'students', 'groups', 'groupedStudents', 'reviews', 'numRequiredReviews', 'reviewees'));
     }
 }
 
