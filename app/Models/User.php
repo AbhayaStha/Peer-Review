@@ -2,25 +2,56 @@
 
 namespace App\Models;
 
+use Illuminate\Foundation\Auth\User as Authenticatable; // For authentication
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
-class User extends Model
+class User extends Authenticatable
 {
-    use HasFactory;
-    
+    use HasFactory, Notifiable;
+
+    protected $fillable = [
+        'name',
+        'email',
+        's_number',
+        'password',
+        'type',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    /**
+     * Relationships
+     */
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class);
     }
 
-    // Group Members: A user can be part of many groups
+    // Courses where the user is a student
+    public function studentCourses()
+    {
+        return $this->belongsToMany(Course::class, 'enrollments')->wherePivot('role', 'student');
+    }
+
+    // Courses where the user is a teacher
+    public function teacherCourses()
+    {
+        return $this->belongsToMany(Course::class, 'enrollments')->wherePivot('role', 'teacher');
+    }
+
     public function groupMembers()
     {
         return $this->hasMany(GroupMember::class);
     }
 
-    // Reviews: A user can write and receive many reviews
     public function reviewsGiven()
     {
         return $this->hasMany(Review::class, 'reviewer_id');
@@ -29,5 +60,18 @@ class User extends Model
     public function reviewsReceived()
     {
         return $this->hasMany(Review::class, 'reviewee_id');
+    }
+
+    /**
+     * Helper functions
+     */
+    public function isStudent()
+    {
+        return $this->type === 'student';
+    }
+
+    public function isTeacher()
+    {
+        return $this->type === 'teacher';
     }
 }
