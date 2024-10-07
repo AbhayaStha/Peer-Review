@@ -81,10 +81,13 @@ public function show(Assessment $assessment)
     // Get the number of required reviews
     $numRequiredReviews = $assessment->num_required_reviews;
 
-    // Get the reviewees for the student
-    $reviewees = $students->filter(function ($student) {
-        return $student->id !== auth()->id();
+    // Get the group of the current user
+    $currentUserGroup = $groups->first(function ($group) {
+        return $group->groupMembers()->where('user_id', auth()->id())->exists();
     });
+
+    // Get the reviewees for the student
+    $reviewees = $currentUserGroup->groupMembers()->where('user_id', '!=', auth()->id())->get();
 
     // Check if the user is a teacher
     if (auth()->user()->isTeacher()) {

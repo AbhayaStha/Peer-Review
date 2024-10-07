@@ -22,13 +22,13 @@
                             <label for="reviewee">Select Reviewee:</label>
                             <select name="reviewee_id" id="reviewee">
                                 @foreach ($reviewees as $reviewee)
-                                    <option value="{{ $reviewee->id }}">{{ $reviewee->name }}</option>
+                                    <option value="{{ $reviewee->user_id }}">{{ $reviewee->user->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div>
-                            <label for="review">Enter Review:</label>
-                            <textarea name="review_text" id="review" rows="5"></textarea>
+                            <label for="review_text">Enter Review:</label>
+                            <textarea name="review_text" id="review_text" rows="5"></textarea>
                         </div>
                         <button type="submit" class="bg-orange-500 hover:bg-orange-700 text-black font-bold py-4 px-6 rounded border border-gray-300">
                             Submit Review
