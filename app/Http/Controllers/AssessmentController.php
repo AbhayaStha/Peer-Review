@@ -87,8 +87,10 @@ public function show(Assessment $assessment)
     });
 
     // Get the reviewees for the student
-    $reviewees = $currentUserGroup->groupMembers()->where('user_id', '!=', auth()->id())->get();
-
+    $reviewees = [];
+    if ($currentUserGroup) {
+        $reviewees = $currentUserGroup->groupMembers()->where('user_id', '!=', auth()->id())->get();
+    }
     // Check if the user is a teacher
     if (auth()->user()->isTeacher()) {
         // Display the teacher view

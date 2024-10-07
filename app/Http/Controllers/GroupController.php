@@ -48,7 +48,7 @@ class GroupController extends Controller
         $existingGroup = Group::where('assessment_id', $request->input('assessment_id'))
             ->where('group_name', $request->input('group_name'))
             ->first();
-    
+        
         if ($existingGroup) {
             // If a group with the same name already exists, use that one
             $group = $existingGroup;
@@ -59,16 +59,16 @@ class GroupController extends Controller
                 'group_name' => $request->input('group_name'),
             ]);
         }
-    
+        
         // Add students to the group
         foreach ($request->input('students') as $studentId) {
             // Check if the student is already a member of a group
             $existingMember = GroupMember::where('user_id', $studentId)
-                ->where('group_id', function ($query) use ($request) {
-                    $query->where('assessment_id', $request->input('assessment_id'));
+                ->whereHas('group', function ($query) use ($group) {
+                    $query->where('assessment_id', $group->assessment_id);
                 })
                 ->first();
-    
+        
             if (!$existingMember) {
                 // If the student is not already a member of a group, add them
                 GroupMember::create([
@@ -78,11 +78,9 @@ class GroupController extends Controller
             } else {
                 // If the student is already a member of a group, remove them from the existing group
                 GroupMember::where('user_id', $studentId)
-                    ->where('group_id', function ($query) use ($request) {
-                        $query->where('assessment_id', $request->input('assessment_id'));
-                    })
+                    ->where('group_id', $existingMember->group_id)
                     ->delete();
-    
+        
                 // Add the student to the new group
                 GroupMember::create([
                     'group_id' => $group->id,
@@ -90,7 +88,9 @@ class GroupController extends Controller
                 ]);
             }
         }
-    
+        
+       
+        
         // Redirect to the assessment page
         return redirect()->route('assessments.show', $request->input('assessment_id'));
     }
