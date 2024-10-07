@@ -19,4 +19,16 @@ class Course extends Model
     {
         return $this->hasMany(Assessment::class);
     }
+
+    // Teachers: A course can have many teachers
+    public function teachers()
+    {
+        return $this->belongsToMany(User::class, 'enrollments', 'course_id', 'user_id')->wherePivot('role', 'teacher');
+    }
+
+    // Students: A course can have many students
+    public function students()
+    {
+        return $this->belongsToMany(User::class, 'enrollments', 'course_id', 'user_id')->wherePivot('role', 'student');
+    }
 }

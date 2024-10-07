@@ -13,11 +13,6 @@ class GroupMemberSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 50; $i++) {
-            GroupMember::create([
-                'group_id' => rand(1, 5),
-                'user_id' => $i + 5, 
-            ]);
-        }
+       
     }
 }

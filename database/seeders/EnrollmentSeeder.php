@@ -14,8 +14,9 @@ class EnrollmentSeeder extends Seeder
     public function run(): void
     {
         for ($i = 1; $i <= 50; $i++) {
+            $courseId = ($i % 5) + 1;
             Enrollment::create([
-                'course_id' => rand(1, 5),
+                'course_id' => $courseId,
                 'user_id' => $i + 5, 
             ]);
         }

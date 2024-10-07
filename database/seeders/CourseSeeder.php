@@ -13,11 +13,16 @@ class CourseSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 5; $i++) {
-            Course::create([
-                'course_code' => 'COURSE' . $i,
-                'name' => 'Course ' . $i,
-            ]);
+        $courses = [
+            ['course_code' => 'MATH001', 'name' => 'Mathematics'],
+            ['course_code' => 'SCIE002', 'name' => 'Science'],
+            ['course_code' => 'ENGL003', 'name' => 'English'],
+            ['course_code' => 'HIST004', 'name' => 'History'],
+            ['course_code' => 'PHYS005', 'name' => 'Physics'],
+        ];
+
+        foreach ($courses as $course) {
+            Course::create($course);
         }
     }
 }

@@ -13,11 +13,6 @@ class GroupSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 5; $i++) {
-            Group::create([
-                'assessment_id' => $i,
-                'group_name' => 'Group ' . $i,
-            ]);
-        }
+        
     }
 }

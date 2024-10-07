@@ -1,9 +1,10 @@
-<?php
+<?php 
 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Course;
+use App\Models\Assessment;
 
 class CourseController extends Controller
 {
@@ -36,8 +37,13 @@ class CourseController extends Controller
 
     public function show(Course $course)
     {
+        // Get the assessments for the course
+        $assessments = $course->assessments;
+
+        // Get the teachers for the course
+        $teachers = $course->teachers;
+
         // Display the course details
-        return view('courses.show', compact('course'));
+        return view('course', compact('course', 'assessments', 'teachers'));
     }
 }
-

@@ -9,6 +9,13 @@ class Review extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'reviewer_id',
+        'reviewee_id',
+        'review_texts',
+        'assessment_id',
+    ];
+
     // Assessment: A review belongs to an assessment
     public function assessment()
     {
