@@ -2,47 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>@yield('title', 'Peer Review Application')</title>
-
-    <!-- Include any CSS files here -->
+    <title>Peer Review System</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
+    <x-app-layout>
+        <x-slot name="header">
+            @if (auth()->check())
+                <p><strong>{{ auth()->user()->name }}</strong> ({{ ucfirst(auth()->user()->type) }})</p>
+            @endif
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                <!-- {{ __('Dashboard') }} -->
+                @yield('header')
+            </h2>
+        </x-slot>
 
-    <header>
-        <nav>
-            <ul>
-                @auth
-                    <li>Welcome, {{ auth()->user()->name }} ({{ ucfirst(auth()->user()->type) }})</li>
-                    <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li><a href="{{ route('logout') }}" 
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        Logout
-                    </a></li>
-
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-                @else
-                    <li><a href="{{ route('login') }}">Login</a></li>
-                    <li><a href="{{ route('register') }}">Register</a></li>
-                @endauth
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        @yield('content')
-    </main>
-
-    <footer>
-        <p>&copy; 2024 Peer Review Application</p>
-    </footer>
-
-    <!-- Include any JavaScript files here -->
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900">
+                        @yield('content')
+                    </div>
+                </div>
+            </div>
+        </div>
+    </x-app-layout>
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>
