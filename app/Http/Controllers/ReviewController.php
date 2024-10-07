@@ -34,13 +34,13 @@ class ReviewController extends Controller
 
     public function show(User $user)
     {
-        // Get the reviews for the user
-        $reviews = $user->reviews;
-
+        // Get the reviews given by the user
+        $reviewsGiven = $user->reviewsGiven;
+    
         // Get the reviews received by the user
         $reviewsReceived = $user->reviewsReceived;
-
-        // Display the reviews
-        return view('reviews.show', compact('user', 'reviews', 'reviewsReceived'));
+    
+        // Return the view
+        return view('review', compact('user', 'reviewsGiven', 'reviewsReceived'));
     }
 }
