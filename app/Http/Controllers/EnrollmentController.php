@@ -28,21 +28,48 @@ class EnrollmentController extends Controller
      */
     public function store(Request $request, $type)
     {
-        $enrollment = new Enrollment();
-        $enrollment->user_id = $request->user_id;
-        $enrollment->course_id = $request->course_id;
-        $enrollment->role = $type == 'enroll' ? 'student' : 'teacher';
-        $enrollment->save();
-        return redirect()->back()->with('success', $type == 'enroll' ? 'Enrolled successfully!' : 'Course assigned successfully!');
-    
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        if ($type == 'enroll') {
+            $enrollment = Enrollment::firstOrNew([
+                'course_id' => $request->input('course_id'),
+                'user_id' => $request->input('user_id'),
+                'role' => 'student',
+            ]);
+
+            if ($enrollment->exists) {
+                return redirect()->back()->with('error', 'You are already enrolled in this course.');
+            }
+
+            $enrollment->save();
+
+            return redirect()->route('dashboard')->with('success', 'You have been enrolled in the course.');
+        } elseif ($type == 'teach') {
+            $course = Course::find($request->input('course_id'));
+            $course->teachers()->attach($request->input('user_id'));
+
+            return redirect()->route('dashboard')->with('success', 'You are now teaching this course.');
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Course $course)
     {
-        //
+        if (auth()->user()->isTeacher() && $course->teachers()->where('user_id', auth()->user()->id)->exists()) {
+            // Return the course view
+            return view('courses.show', compact('course'));
+        } elseif (auth()->user()->isStudent() && $course->enrollments()->where('user_id', auth()->user()->id)->exists()) {
+            // Return the course view
+            return view('courses.show', compact('course'));
+        } else {
+            // Return an error message
+            return redirect()->route('dashboard')->with('error', 'You do not have access to this course.');
+        }
     }
 
     /**

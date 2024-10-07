@@ -37,13 +37,25 @@ class CourseController extends Controller
 
     public function show(Course $course)
     {
-        // Get the assessments for the course
-        $assessments = $course->assessments;
+        if (auth()->user()->isTeacher() && $course->teachers->contains(auth()->user())) {
+            // Get the assessments for the course
+            $assessments = $course->assessments;
 
-        // Get the teachers for the course
-        $teachers = $course->teachers;
+            // Get the teachers for the course
+            $teachers = $course->teachers;
 
-        // Display the course details
-        return view('course', compact('course', 'assessments', 'teachers'));
+            // Display the course details
+            return view('course', compact('course', 'assessments', 'teachers'));
+        } elseif (auth()->user()->isStudent() && $course->enrollments()->where('user_id', auth()->user()->id)->exists()) {
+            // Get the assessments for the course
+            $assessments = $course->assessments;
+            $teachers = $course->teachers;
+
+            // Display the course details
+            return view('course', compact('course', 'assessments', 'teachers'));
+        } else {
+            // Return an error message
+            return redirect()->route('dashboard')->with('error', 'You do not have access to this course.');
+        }
     }
 }

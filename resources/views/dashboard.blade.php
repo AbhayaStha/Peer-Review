@@ -57,6 +57,11 @@
                             </ul>
 
                             <h3 class="mt-4">Available Courses to Teach:</h3>
+                            @if (session('error'))
+                                <div class="text-red-500">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
                             <ul>
                                 @forelse (App\Models\Course::whereNotIn('id', auth()->user()->teacherCourses->pluck('id'))->get() as $course)
                                     <li>
