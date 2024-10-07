@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Enrollment;
+use App\Models\Course;
 
 class EnrollmentController extends Controller
 {
@@ -32,28 +33,43 @@ class EnrollmentController extends Controller
             'course_id' => 'required|exists:courses,id',
             'user_id' => 'required|exists:users,id',
         ]);
-
+    
+        // Check if we are enrolling a student
         if ($type == 'enroll') {
+            // Enroll the student in the course
             $enrollment = Enrollment::firstOrNew([
                 'course_id' => $request->input('course_id'),
                 'user_id' => $request->input('user_id'),
-                'role' => 'student',
+                'role' => 'student',  
             ]);
-
+    
             if ($enrollment->exists) {
                 return redirect()->back()->with('error', 'You are already enrolled in this course.');
             }
-
+    
             $enrollment->save();
-
+    
             return redirect()->route('dashboard')->with('success', 'You have been enrolled in the course.');
+        
+        // Check if we are assigning a teacher
         } elseif ($type == 'teach') {
-            $course = Course::find($request->input('course_id'));
-            $course->teachers()->attach($request->input('user_id'));
-
+            // Assign the teacher to the course
+            $enrollment = Enrollment::firstOrNew([
+                'course_id' => $request->input('course_id'),
+                'user_id' => $request->input('user_id'),
+                'role' => 'teacher',  
+            ]);
+    
+            if ($enrollment->exists) {
+                return redirect()->back()->with('error', 'You are already teaching this course.');
+            }
+    
+            $enrollment->save();
+    
             return redirect()->route('dashboard')->with('success', 'You are now teaching this course.');
         }
     }
+    
 
     /**
      * Display the specified resource.
