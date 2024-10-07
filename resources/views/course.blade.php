@@ -34,41 +34,36 @@
                         <form action="{{ route('assessments.store') }}" method="POST">
                             @csrf
                             <input type="hidden" name="course_id" value="{{ $course->id }}">
-
-                            <div class="mb-4">
+                            <div>
                                 <label for="title">Assessment Title:</label>
-                                <input type="text" id="title" name="title" required maxlength="20">
+                                <input type="text" name="title" id="title" maxlength="20">
                             </div>
-
-                            <div class="mb-4">
+                            <div>
                                 <label for="instruction">Instruction:</label>
-                                <textarea id="instruction" name="instruction" required></textarea>
+                                <textarea name="instruction" id="instruction"></textarea>
                             </div>
-
-                            <div class="mb-4">
-                                <label for="reviews_required">Number of Reviews Required:</label>
-                                <input type="number" id="reviews_required" name="reviews_required" required min="1">
+                            <div>
+                                <label for="num_reviews">Number of Reviews:</label>
+                                <input type="number" name="num_reviews" id="num_reviews" min="1">
                             </div>
-
-                            <div class="mb-4">
+                            <div>
                                 <label for="max_score">Maximum Score:</label>
-                                <input type="number" id="max_score" name="max_score" required min="1" max="100">
+                                <input type="number" name="max_score" id="max_score" min="1" max="100">
                             </div>
-
-                            <div class="mb-4">
+                            <div>
                                 <label for="due_date">Due Date:</label>
-                                <input type="datetime-local" id="due_date" name="due_date" required>
+                                <input type="datetime-local" name="due_date" id="due_date">
                             </div>
-
-                            <div class="mb-4">
+                            <div>
                                 <label for="type">Type:</label>
-                                <select id="type" name="type" required>
+                                <select name="type" id="type">
                                     <option value="student-select">Student-Select</option>
                                     <option value="teacher-assign">Teacher-Assign</option>
                                 </select>
                             </div>
-
-                            <button type="submit">Add Assessment</button>
+                            <button type="submit" class="bg-orange-500 hover:bg-orange-700 text-black font-bold py-4 px-6 rounded border border-gray-300">
+                                Create Assessment
+                            </button>
                         </form>
                     @endif
                 </div>

@@ -23,6 +23,8 @@ Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store
 Route::get('/reviews/{user}', [ReviewController::class, 'show'])->name('reviews.show');
 Route::post('/enrollments', [EnrollmentController::class, 'store'])->name('enrollments.store');
 Route::post('/enrollments/{type}', [EnrollmentController::class, 'store'])->name('enrollments.store');
+Route::post('/assessments', [AssessmentController::class, 'create'])->name('assessments.store');
+Route::post('/assessments', [AssessmentController::class, 'store'])->name('assessments.store');
 
 
 Route::middleware('auth')->group(function () {

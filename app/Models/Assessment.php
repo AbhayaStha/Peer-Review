@@ -8,6 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Assessment extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'course_id',
+        'title',
+        'instruction',
+        'num_reviews',
+        'max_score',
+        'due_date',
+        'type',
+    ];
 
     public function course()
     {
