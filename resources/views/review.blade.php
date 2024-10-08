@@ -42,7 +42,7 @@
     </ul>
 
     <h3 class="mt-4">Assign Score:</h3>
-    <form action="{{ route('markings.store') }}" method="POST" class="space-y-4">
+    <form action="#" method="POST" class="space-y-4">
         @csrf
         <input type="hidden" name="assessment_id" value="{{ $assessment->id }}">
         <input type="hidden" name="student_id" value="{{ $user->id }}">
@@ -54,7 +54,7 @@
         </div>
 
         <!-- Submit Button -->
-        <button type="submit" class="bg-orange-500 hover:bg-orange-700 text-black font-bold py-2 px-4 rounded-md border border-gray-300">
+        <button type="submit" class="bg-orange-500 hover:bg-orange-700 text-black font-bold py-2 px-4 rounded-md border border-gray-300" disabled>
             Assign Score
         </button>
     </form>

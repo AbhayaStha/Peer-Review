@@ -13,6 +13,16 @@
     <p>Due date: {{ $assessment->due_date }}</p>
 
     <h3 class="mt-4">Submit Peer Review:</h3>
+    @if (count($errors) > 0)
+            <div style="padding: 15px; border-radius: 5px; margin-bottom: 20px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
 <form action="{{ route('reviews.store') }}" method="POST">
     @csrf
     <input type="hidden" name="assessment_id" value="{{ $assessment->id }}">
@@ -24,7 +34,7 @@
                     <option value="{{ $reviewee->user_id }}">{{ $reviewee->user->name }}</option>
                 @endforeach
             @else
-                @foreach ($students as $student)
+                @foreach ($studentsForReviews as $student)
                     <option value="{{ $student->id }}">{{ $student->name }}</option>
                 @endforeach
             @endif

@@ -37,31 +37,9 @@ class AssessmentController extends Controller
         'course_id' => $request->input('course_id'),
     ]);
 
-    // Assign students to groups
-    $groupSize = ceil($students->count() / $request->input('num_required_reviews'));
-    $groups = array_chunk($students->toArray(), $groupSize);
-
-    // Create groups
-    foreach ($groups as $group) {
-        $groupModel = Group::create([
-            'assessment_id' => $assessment->id,
-        ]);
-
-        // Assign students to the group
-        foreach ($group as $student) {
-            GroupMember::create([
-                'group_id' => $groupModel->id,
-                'user_id' => $student['id'],
-            ]);
-        }
-    }
-
-    // Redirect to the assessments index
-    return redirect()->route('assessments.index');
 }
 
-// In your AssessmentController
-// In your AssessmentController
+
 public function show(Assessment $assessment)
 {
     // Get the course for the assessment

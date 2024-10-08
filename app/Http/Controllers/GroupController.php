@@ -44,6 +44,10 @@ class GroupController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'assessment_id' => 'required',
+            'group_name' => 'required|string|max:20', // Add validation for group_name
+        ]);
         
         // Check if a group with the same name already exists
         $existingGroup = Group::where('assessment_id', $request->input('assessment_id'))

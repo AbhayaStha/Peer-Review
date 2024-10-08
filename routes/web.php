@@ -34,7 +34,6 @@ Route::get('/courses/{course}/enroll', [CourseController::class, 'enrollStudents
 Route::post('/courses/{course}/enroll', [CourseController::class, 'enrollStudentsStore'])->name('courses.enroll.store');
 Route::get('/assessments/{assessment}/edit', [AssessmentController::class, 'edit'])->name('assessments.edit');
 Route::patch('/assessments/{assessment}', [AssessmentController::class, 'update'])->name('assessments.update');
-Route::post('/markings', [MarkingController::class, 'store'])->name('markings.store');
 Route::get('/reviews/{user}/{assessment}', [ReviewController::class, 'show'])->name('reviews.show');
 Route::post('/courses/upload', [CourseUploadController::class, 'upload'])->name('courses.upload');
 
