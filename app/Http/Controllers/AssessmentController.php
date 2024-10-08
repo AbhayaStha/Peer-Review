@@ -58,13 +58,18 @@ class AssessmentController extends Controller
     return redirect()->route('assessments.index');
 }
 
+// In your AssessmentController
+// In your AssessmentController
 public function show(Assessment $assessment)
 {
     // Get the course for the assessment
     $course = $assessment->course;
 
     // Get the students enrolled in the course
-    $students = $course->students()->get();
+    $allStudents = $course->students()->get();
+
+    // Get the students enrolled in the course for student reviews
+    $studentsForReviews = $course->students()->where('type', '!=', 'teacher')->paginate(10);
 
     // Get the groups for the assessment
     $groups = $assessment->groups;
@@ -92,13 +97,14 @@ public function show(Assessment $assessment)
         $reviewees = $currentUserGroup->groupMembers()->where('user_id', '!=', auth()->id())->get();
     }
     // Check if the user is a teacher
-    if (auth()->user()->isTeacher()) {
+    if (auth()->user()->type === 'teacher') {
         // Display the teacher view
-        return view('assessments.teacher', compact('assessment', 'course', 'students', 'groups', 'groupedStudents', 'numRequiredReviews'));
+        return view('assessments.teacher', compact('assessment', 'course', 'allStudents', 'groups', 'groupedStudents', 'numRequiredReviews', 'studentsForReviews'));
     } else {
         // Display the student view
-        return view('assessments.student', compact('assessment', 'course', 'students', 'groups', 'groupedStudents', 'reviews', 'numRequiredReviews', 'reviewees'));
+        return view('assessments.student', compact('assessment', 'course', 'studentsForReviews', 'groups', 'groupedStudents', 'reviews', 'numRequiredReviews', 'reviewees'));
     }
+
 }
     public function hasSubmission()
     {

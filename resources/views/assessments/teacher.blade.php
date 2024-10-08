@@ -42,10 +42,10 @@
             <input type="text" name="group_name" id="group_name" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
         </div>
 
-        <!-- Select Students (Excluding Teachers) -->
+ <!-- Select Students (Excluding Teachers) -->
         <div>
             <label for="students" class="block text-sm font-medium text-gray-700">Select Students:</label>
-            @foreach ($students->filter(fn($student) => !$student->is_teacher) as $student) <!-- Filtering out teachers -->
+            @foreach ($allStudents->filter(fn($student) => $student->type !== 'teacher') as $student) 
                 <div class="flex items-center">
                     <input type="checkbox" name="students[]" value="{{ $student->id }}" class="mr-2">
                     <label class="text-gray-700">{{ $student->name }}</label>
@@ -59,19 +59,22 @@
         </button>
     </form>
 @endif
+ <!-- Student Reviews Section -->
+<h3 class="mt-6">Student Reviews:</h3>
+<ul class="list-disc pl-5">
+    @forelse ($studentsForReviews as $student) 
+        <li>
+            <a href="{{ route('reviews.show', ['user' => $student, 'assessment' => $assessment]) }}" class="text-blue-500 hover:underline">{{ $student->name }}</a>
+            (Submitted: {{ $student->reviewsGiven()->where('assessment_id', $assessment->id)->count() }}, 
+            Received: {{ $student->reviewsReceived()->where('assessment_id', $assessment->id)->count() }})
+        </li>
+    @empty
+        <li>No students found.</li>
+    @endforelse
+</ul>
 
-
-    <!-- Student Reviews Section -->
-    <h3 class="mt-6">Student Reviews:</h3>
-    <ul class="list-disc pl-5">
-        @forelse ($students->filter(fn($student) => !$student->is_teacher) as $student) <!-- Filtering out teachers -->
-            <li>
-                <a href="{{ route('reviews.show', ['user' => $student, 'assessment' => $assessment]) }}" class="text-blue-500 hover:underline">{{ $student->name }}</a>
-                (Submitted: {{ $student->reviewsGiven()->where('assessment_id', $assessment->id)->count() }}, 
-                Received: {{ $student->reviewsReceived()->where('assessment_id', $assessment->id)->count() }})
-            </li>
-        @empty
-            <li>No students found.</li>
-        @endforelse
-    </ul>
+<!-- Pagination Links -->
+<div class="d-flex justify-content-center">
+    {{$studentsForReviews->links()}}
+</div>
 @endsection
