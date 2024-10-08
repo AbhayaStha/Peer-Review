@@ -35,7 +35,7 @@ class CourseUploadController extends Controller
             $courseName = $courseData[1];
 
             // Check if a course with the same code already exists
-            if (Course::where('code', $courseCode)->exists()) {
+            if (Course::where('course_code', $courseCode)->exists()) {
                 return redirect()->back()->with('error', 'A course with the same code already exists.');
             }
 

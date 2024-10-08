@@ -23,8 +23,8 @@ class CourseController extends Controller
     {
         // Validate the course form
         $request->validate([
-            'code' => 'required',
-            'name' => 'required',
+            'code' => 'required|string',
+            'name' => 'required|string'
         ]);
 
         // Create a new course
