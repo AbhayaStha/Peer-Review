@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\CourseUploadController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\EnrollmentController;
@@ -35,6 +36,7 @@ Route::get('/assessments/{assessment}/edit', [AssessmentController::class, 'edit
 Route::patch('/assessments/{assessment}', [AssessmentController::class, 'update'])->name('assessments.update');
 Route::post('/markings', [MarkingController::class, 'store'])->name('markings.store');
 Route::get('/reviews/{user}/{assessment}', [ReviewController::class, 'show'])->name('reviews.show');
+Route::post('/courses/upload', [CourseUploadController::class, 'upload'])->name('courses.upload');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
