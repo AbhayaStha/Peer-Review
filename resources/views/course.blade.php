@@ -38,6 +38,15 @@
     <!-- Add Peer Review Assessment Form (for Teachers) -->
     @if (auth()->user()->isTeacher())
         <h3 class="mt-6 text-lg font-bold">Add Peer Review Assessment:</h3>
+        @if (count($errors) > 0)
+            <div style="padding: 15px; border-radius: 5px; margin-bottom: 20px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <form action="{{ route('assessments.store') }}" method="POST" class="space-y-4">
             @csrf
             <input type="hidden" name="course_id" value="{{ $course->id }}">

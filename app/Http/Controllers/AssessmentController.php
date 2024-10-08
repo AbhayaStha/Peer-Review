@@ -13,11 +13,13 @@ class AssessmentController extends Controller
 {
     // Validate the assessment form
     $request->validate([
-        'title' => 'required',
-        'instruction' => 'required',
-        'num_required_reviews' => 'required',
-        'max_score' => 'required',
-        'due_date' => 'required',
+        'title' => 'required|string|max:20',
+        'instruction' => 'required|string',
+        'num_required_reviews' => 'required|integer|min:1',
+        'max_score' => 'required|integer|min:1|max:100',
+        'due_date' => 'required|date',
+        'type' => 'required|string',
+        'course_id' => 'required|exists:courses,id',
     ]);
 
     // Get the course and students
@@ -120,11 +122,11 @@ public function show(Assessment $assessment)
 {
     // Validate the assessment form
     $request->validate([
-        'title' => 'required',
-        'instruction' => 'required',
-        'num_required_reviews' => 'required',
-        'max_score' => 'required',
-        'due_date' => 'required',
+        'title' => 'required|string|max:20',
+        'instruction' => 'required|string',
+        'num_required_reviews' => 'required|integer|min:1',
+        'max_score' => 'required|integer|min:1|max:100',
+        'due_date' => 'required|date',
     ]);
 
     // Update the assessment
@@ -140,18 +142,28 @@ public function show(Assessment $assessment)
     return redirect()->route('assessments.show', $assessment)->with('success', 'Assessment updated successfully!');
 }
 
-    public function store(Request $request)
-    {
-        $assessment = new Assessment();
-        $assessment->course_id = $request->course_id;
-        $assessment->title = $request->title;
-        $assessment->instruction = $request->instruction;
-        $assessment->num_required_reviews = $request->num_required_reviews;
-        $assessment->max_score = $request->max_score;
-        $assessment->due_date = $request->due_date;
-        $assessment->type = $request->type;
-        $assessment->save();
-        return redirect()->back()->with('success', 'Assessment created successfully!');
-    }
+public function store(Request $request)
+{
+    // Validate the assessment form
+    $request->validate([
+        'course_id' => 'required|exists:courses,id',
+        'title' => 'required|string|max:20',
+        'instruction' => 'required|string',
+        'num_required_reviews' => 'required|integer|min:1',
+        'max_score' => 'required|integer|min:1|max:100',
+        'due_date' => 'required|date',
+        'type' => 'required|string',
+    ]);
 
+    $assessment = new Assessment();
+    $assessment->course_id = $request->course_id;
+    $assessment->title = $request->title;
+    $assessment->instruction = $request->instruction;
+    $assessment->num_required_reviews = $request->num_required_reviews;
+    $assessment->max_score = $request->max_score;
+    $assessment->due_date = $request->due_date;
+    $assessment->type = $request->type;
+    $assessment->save();
+    return redirect()->back()->with('success', 'Assessment created successfully!');
+}
 }
