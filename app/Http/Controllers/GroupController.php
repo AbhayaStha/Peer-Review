@@ -30,7 +30,7 @@ class GroupController extends Controller
     {
         // Get the students in the group
         $students = $group->groupMembers()->get();
-        
+        // dd($students);
         // Get the ratings provided by each student
         $ratings = [];
         foreach ($students as $student) {
@@ -44,6 +44,7 @@ class GroupController extends Controller
 
     public function store(Request $request)
     {
+        
         // Check if a group with the same name already exists
         $existingGroup = Group::where('assessment_id', $request->input('assessment_id'))
             ->where('group_name', $request->input('group_name'))
