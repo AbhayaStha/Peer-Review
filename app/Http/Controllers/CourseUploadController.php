@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Course;
-use App\Models\Assessment;
-use App\Models\User;
 
 class CourseUploadController extends Controller
 {
@@ -17,41 +15,42 @@ class CourseUploadController extends Controller
         ], [
             'file.mimes' => 'The file must be a CSV or TXT file.',
         ]);
-    
+
         try {
             // Read the uploaded file
             $file = $request->file('file');
             $contents = file($file->getRealPath());
-    
 
+            // Parse the CSV data
             $data = array_map('str_getcsv', $contents);
-    
+
             // Skip the header row
             array_shift($data);
-    
+
+            // Get the course data
             $courseData = $data[0];
-    
+
+            // Get the course code and name
             $courseCode = $courseData[0];
             $courseName = $courseData[1];
-            $teachers = explode(',', $courseData[2]);
-            $assessments = explode(',', $courseData[3]);
-            $students = explode(',', $courseData[4]);
-            $snumberTeachers = explode(',', $courseData[5]);
-            $snumberStudents = explode(',', $courseData[6]);
-    
-            // Dump the data from the CSV file
-            dd([
+
+            // Check if a course with the same code already exists
+            if (Course::where('code', $courseCode)->exists()) {
+                return redirect()->back()->with('error', 'A course with the same code already exists.');
+            }
+
+            // Create a new course
+            $course = Course::create([
                 'course_code' => $courseCode,
-                'course_name' => $courseName,
-                'teachers' => $teachers,
-                'assessments' => $assessments,
-                'students' => $students,
-                'snumber_teachers' => $snumberTeachers,
-                'snumber_students' => $snumberStudents,
+                'name' => $courseName,
             ]);
+
+            // Redirect to the courses index
+            return redirect()->route('dashboard');
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return redirect()->back()->with('error', 'An error occurred while uploading the course.');
+
         }
     }
-    
 }
