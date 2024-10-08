@@ -69,8 +69,31 @@ class EnrollmentController extends Controller
             return redirect()->route('dashboard')->with('success', 'You are now teaching this course.');
         }
     }
+    public function storeMultipleStudents(Request $request, $type)
+    {
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'user_ids' => 'required|array',
+        ]);
     
-
+        if ($type == 'enroll') {
+            foreach ($request->input('user_ids') as $userId) {
+                $enrollment = Enrollment::firstOrNew([
+                    'course_id' => $request->input('course_id'),
+                    'user_id' => $userId,
+                    'type' => 'student',
+                ]);
+    
+                if ($enrollment->exists) {
+                    return redirect()->back()->with('error', 'You are already enrolled in this course.');
+                }
+    
+                $enrollment->save();
+            }
+    
+            return redirect()->route('enrol', $request->input('course_id'))->with('success', 'Students enrolled successfully.');
+        }
+    }
     /**
      * Display the specified resource.
      */

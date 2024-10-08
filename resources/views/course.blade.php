@@ -15,8 +15,13 @@
         @empty
             <li>No teachers found.</li>
         @endforelse
-    </ul>
-
+    </ul><br>
+    <!-- Enroll Students Button (for Teachers) -->
+    @if (auth()->user()->isTeacher())
+        <a href="{{ route('enrol', $course) }}" class="bg-orange-500 hover:bg-orange-700 text-black font-bold py-2 px-4 rounded-md border border-gray-300">
+            Enroll Students
+        </a>
+    @endif
     <!-- Assessments Section -->
     <h3 class="mt-6 text-lg font-bold">Assessments:</h3>
     <ul class="list-disc pl-5">

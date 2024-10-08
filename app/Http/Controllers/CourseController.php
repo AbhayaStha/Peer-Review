@@ -1,10 +1,12 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Course;
 use App\Models\Assessment;
+use App\Models\User;
+use App\Http\Controllers\EnrollmentController;
 
 class CourseController extends Controller
 {
@@ -34,6 +36,7 @@ class CourseController extends Controller
         // Redirect to the courses index
         return redirect()->route('courses.index');
     }
+    
 
     public function show(Course $course)
     {
@@ -57,5 +60,19 @@ class CourseController extends Controller
             // Return an error message
             return redirect()->route('dashboard')->with('error', 'You do not have access to this course.');
         }
+    }
+
+    public function enrollStudents(Course $course)
+    {
+        $enrolledStudentIds = $course->enrollments()->pluck('user_id')->toArray();
+        $availableStudents = User::where('type', 'student')->whereNotIn('id', $enrolledStudentIds)->get();
+        return view('enrol', compact('course', 'availableStudents'));
+    }
+
+    public function enrollStudentsStore(Request $request, Course $course)
+    {
+        $request->merge(['course_id' => $course->id, 'type' => 'enroll']);
+        $enrollmentController = new EnrollmentController();
+        return $enrollmentController->storeMultipleStudents($request, 'enroll');
     }
 }
