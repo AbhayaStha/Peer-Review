@@ -61,15 +61,16 @@ class ReviewController extends Controller
         return redirect()->route('assessments.show', $request->input('assessment_id'))->with('success', 'Review submitted successfully!');
     }
 
-    public function show(User $user)
-    {
-        // Get the reviews given by the user
-        $reviewsGiven = $user->reviewsGiven;
+// In your controller
+public function show(User $user, Assessment $assessment)
+{
+    // Get the reviews given by the user
+    $reviewsGiven = $user->reviewsGiven()->where('assessment_id', $assessment->id)->get();
     
-        // Get the reviews received by the user
-        $reviewsReceived = $user->reviewsReceived;
+    // Get the reviews received by the user
+    $reviewsReceived = $user->reviewsReceived()->where('assessment_id', $assessment->id)->get();
     
-        // Return the view
-        return view('review', compact('user', 'reviewsGiven', 'reviewsReceived'));
-    }
+    // Return the view
+    return view('review', compact('user', 'reviewsGiven', 'reviewsReceived', 'assessment'));
+}
 }

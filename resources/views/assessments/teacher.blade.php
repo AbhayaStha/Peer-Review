@@ -66,7 +66,7 @@
     <ul class="list-disc pl-5">
         @forelse ($students->filter(fn($student) => !$student->is_teacher) as $student) <!-- Filtering out teachers -->
             <li>
-                <a href="{{ route('reviews.show', $student) }}" class="text-blue-500 hover:underline">{{ $student->name }}</a>
+                <a href="{{ route('reviews.show', ['user' => $student, 'assessment' => $assessment]) }}" class="text-blue-500 hover:underline">{{ $student->name }}</a>
                 (Submitted: {{ $student->reviewsGiven()->where('assessment_id', $assessment->id)->count() }}, 
                 Received: {{ $student->reviewsReceived()->where('assessment_id', $assessment->id)->count() }})
             </li>

@@ -40,4 +40,22 @@
             <li>No reviews received.</li>
         @endif
     </ul>
+
+    <h3 class="mt-4">Assign Score:</h3>
+    <form action="{{ route('markings.store') }}" method="POST" class="space-y-4">
+        @csrf
+        <input type="hidden" name="assessment_id" value="{{ $assessment->id }}">
+        <input type="hidden" name="student_id" value="{{ $user->id }}">
+
+        <!-- Score -->
+        <div>
+            <label for="mark" class="block text-sm font-medium text-gray-700">Score (out of {{ $assessment->max_score }}):</label>
+            <input type="number" name="mark" id="mark" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="bg-orange-500 hover:bg-orange-700 text-black font-bold py-2 px-4 rounded-md border border-gray-300">
+            Assign Score
+        </button>
+    </form>
 @endsection

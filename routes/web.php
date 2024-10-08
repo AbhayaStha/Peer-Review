@@ -6,6 +6,7 @@ use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\MarkingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,6 +33,8 @@ Route::get('/courses/{course}/enroll', [CourseController::class, 'enrollStudents
 Route::post('/courses/{course}/enroll', [CourseController::class, 'enrollStudentsStore'])->name('courses.enroll.store');
 Route::get('/assessments/{assessment}/edit', [AssessmentController::class, 'edit'])->name('assessments.edit');
 Route::patch('/assessments/{assessment}', [AssessmentController::class, 'update'])->name('assessments.update');
+Route::post('/markings', [MarkingController::class, 'store'])->name('markings.store');
+Route::get('/reviews/{user}/{assessment}', [ReviewController::class, 'show'])->name('reviews.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
