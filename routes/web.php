@@ -30,6 +30,8 @@ Route::post('/groups', [GroupController::class, 'store'])->name('groups.store');
 Route::get('/groups/{group}', [GroupController::class, 'show'])->name('groups.show');
 Route::get('/courses/{course}/enroll', [CourseController::class, 'enrollStudents'])->name('enrol');
 Route::post('/courses/{course}/enroll', [CourseController::class, 'enrollStudentsStore'])->name('courses.enroll.store');
+Route::get('/assessments/{assessment}/edit', [AssessmentController::class, 'edit'])->name('assessments.edit');
+Route::patch('/assessments/{assessment}', [AssessmentController::class, 'update'])->name('assessments.update');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

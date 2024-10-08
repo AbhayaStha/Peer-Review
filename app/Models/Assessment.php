@@ -12,7 +12,7 @@ class Assessment extends Model
         'course_id',
         'title',
         'instruction',
-        'num_reviews',
+        'num_required_reviews',
         'max_score',
         'due_date',
         'type',
@@ -33,5 +33,10 @@ class Assessment extends Model
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function hasSubmission()
+    {
+        return $this->reviews()->exists();
     }
 }

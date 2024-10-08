@@ -56,8 +56,8 @@
 
             <!-- Number of Reviews -->
             <div>
-                <label for="num_reviews" class="block text-sm font-medium text-gray-700">Number of Reviews:</label>
-                <input type="number" name="num_reviews" id="num_reviews" min="1" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                <label for="num_required_reviews" class="block text-sm font-medium text-gray-700">Number of Reviews:</label>
+                <input type="number" name="num_required_reviews" id="num_required_reviews" min="1" class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
             </div>
 
             <!-- Maximum Score -->

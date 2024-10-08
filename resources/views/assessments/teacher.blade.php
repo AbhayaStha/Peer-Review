@@ -7,6 +7,18 @@
 @endsection
 
 @section('content')
+    <h3 class="mt-4">Assessment Details:</h3>
+    <p>Instruction: {{ $assessment->instruction }}</p>
+    <p>Number of required reviews: {{ $numRequiredReviews }}</p>
+    <p>Due date: {{ $assessment->due_date }}</p><br>
+
+    <!-- Edit Assessment Button -->
+    @if (!$assessment->hasSubmission())
+        <a href="{{ route('assessments.edit', $assessment) }}" class="bg-orange-500 hover:bg-orange-700 text-black font-bold py-2 px-4 rounded-md border border-gray-300">
+            Edit Assessment
+        </a>
+    @endif
+
     <!-- Groups Section -->
     <h3 class="mt-4">Groups:</h3>
     <ul class="list-disc pl-5">

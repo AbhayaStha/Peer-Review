@@ -94,26 +94,58 @@ public function show(Assessment $assessment)
     // Check if the user is a teacher
     if (auth()->user()->isTeacher()) {
         // Display the teacher view
-        return view('assessments.teacher', compact('assessment', 'course', 'students', 'groups', 'groupedStudents'));
+        return view('assessments.teacher', compact('assessment', 'course', 'students', 'groups', 'groupedStudents', 'numRequiredReviews'));
     } else {
         // Display the student view
         return view('assessments.student', compact('assessment', 'course', 'students', 'groups', 'groupedStudents', 'reviews', 'numRequiredReviews', 'reviewees'));
     }
 }
+    public function hasSubmission()
+    {
+        return $this->reviews()->exists();
+    }
 
+    public function edit(Assessment $assessment)
+    {
+    return view('assessments.edit', compact('assessment'));
+    }
 
-public function store(Request $request)
+    public function update(Request $request, Assessment $assessment)
 {
-    $assessment = new Assessment();
-    $assessment->course_id = $request->course_id;
-    $assessment->title = $request->title;
-    $assessment->instruction = $request->instruction;
-    $assessment->num_required_reviews = $request->num_reviews;
-    $assessment->max_score = $request->max_score;
-    $assessment->due_date = $request->due_date;
-    $assessment->type = $request->type;
-    $assessment->save();
-    return redirect()->back()->with('success', 'Assessment created successfully!');
+    // Validate the assessment form
+    $request->validate([
+        'title' => 'required',
+        'instruction' => 'required',
+        'num_required_reviews' => 'required',
+        'max_score' => 'required',
+        'due_date' => 'required',
+    ]);
+
+    // Update the assessment
+    $assessment->update([
+        'title' => $request->input('title'),
+        'instruction' => $request->input('instruction'),
+        'num_required_reviews' => $request->input('num_required_reviews'),
+        'max_score' => $request->input('max_score'),
+        'due_date' => $request->input('due_date'),
+    ]);
+
+    // Redirect to the assessments index
+    return redirect()->route('assessments.show', $assessment)->with('success', 'Assessment updated successfully!');
 }
+
+    public function store(Request $request)
+    {
+        $assessment = new Assessment();
+        $assessment->course_id = $request->course_id;
+        $assessment->title = $request->title;
+        $assessment->instruction = $request->instruction;
+        $assessment->num_required_reviews = $request->num_required_reviews;
+        $assessment->max_score = $request->max_score;
+        $assessment->due_date = $request->due_date;
+        $assessment->type = $request->type;
+        $assessment->save();
+        return redirect()->back()->with('success', 'Assessment created successfully!');
+    }
 
 }
