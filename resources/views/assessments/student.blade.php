@@ -13,25 +13,42 @@
     <p>Due date: {{ $assessment->due_date }}</p>
 
     <h3 class="mt-4">Submit Peer Review:</h3>
-    <form action="{{ route('reviews.store') }}" method="POST">
-        @csrf
-        <input type="hidden" name="assessment_id" value="{{ $assessment->id }}">
-        <div>
-            <label for="reviewee">Select Reviewee:</label>
-            <select name="reviewee_id" id="reviewee">
+<form action="{{ route('reviews.store') }}" method="POST">
+    @csrf
+    <input type="hidden" name="assessment_id" value="{{ $assessment->id }}">
+    <div>
+        <label for="reviewee">Select Reviewee:</label>
+        <select name="reviewee_id" id="reviewee">
+            @if ($assessment->type === 'teacher-assign')
                 @foreach ($reviewees as $reviewee)
                     <option value="{{ $reviewee->user_id }}">{{ $reviewee->user->name }}</option>
                 @endforeach
-            </select>
+            @else
+                @foreach ($students as $student)
+                    <option value="{{ $student->id }}">{{ $student->name }}</option>
+                @endforeach
+            @endif
+        </select>
+    </div>
+    <div>
+        <label for="review_text">Enter Review:</label>
+        <textarea name="review_text" id="review_text" rows="5"></textarea>
+    </div>
+    <button type="submit" class="bg-orange-500 hover:bg-orange-700 text-black font-bold py-4 px-6 rounded border border-gray-300">
+        Submit Review
+    </button>
+</form>
+    @if (session('success'))
+        <div class="text-green-700">
+            {{ session('success') }}
         </div>
-        <div>
-            <label for="review_text">Enter Review:</label>
-            <textarea name="review_text" id="review_text" rows="5"></textarea>
+    @endif
+
+    @if (session('error'))
+        <div class="text-red-500">
+            {{ session('error') }}
         </div>
-        <button type="submit" class="bg-orange-500 hover:bg-orange-700 text-black font-bold py-4 px-6 rounded border border-gray-300">
-            Submit Review
-        </button>
-    </form>
+    @endif
 
     <h3 class="mt-4">Peer Reviews Received:</h3>
     <ul>

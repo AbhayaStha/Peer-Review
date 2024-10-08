@@ -20,6 +20,7 @@
     @endif
 
     <!-- Groups Section -->
+    @if ($assessment->type !== 'student-select')
     <h3 class="mt-4">Groups:</h3>
     <ul class="list-disc pl-5">
         @foreach ($groups as $group)
@@ -57,6 +58,8 @@
             Create Group
         </button>
     </form>
+@endif
+
 
     <!-- Student Reviews Section -->
     <h3 class="mt-6">Student Reviews:</h3>

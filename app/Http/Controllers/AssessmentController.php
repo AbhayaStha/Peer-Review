@@ -31,7 +31,7 @@ class AssessmentController extends Controller
         'num_required_reviews' => $request->input('num_required_reviews'),
         'max_score' => $request->input('max_score'),
         'due_date' => $request->input('due_date'),
-        'type' => 'teacher-assign',
+        'type' => $request->input('type'),
         'course_id' => $request->input('course_id'),
     ]);
 
